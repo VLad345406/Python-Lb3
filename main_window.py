@@ -7,9 +7,16 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtWidgets import QSpinBox
+
+import classes
+
+department = classes.Department
 
 
 class Ui_MainWindow(object):
+    spinBoxRevenue: QSpinBox
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -24,7 +31,7 @@ class Ui_MainWindow(object):
         self.labelDepartmentName.setFont(font)
         self.labelDepartmentName.setObjectName("labelDepartmentName")
         self.labelRevenue = QtWidgets.QLabel(parent=self.centralwidget)
-        self.labelRevenue.setGeometry(QtCore.QRect(215, 165, 81, 21))
+        self.labelRevenue.setGeometry(QtCore.QRect(210, 165, 85, 21))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.labelRevenue.setFont(font)
@@ -36,13 +43,13 @@ class Ui_MainWindow(object):
         self.textEditDepartmentName.setFont(font)
         self.textEditDepartmentName.setObjectName("textEditDepartmentName")
         self.labelSalaryEmployee = QtWidgets.QLabel(parent=self.centralwidget)
-        self.labelSalaryEmployee.setGeometry(QtCore.QRect(145, 205, 155, 23))
+        self.labelSalaryEmployee.setGeometry(QtCore.QRect(140, 205, 155, 23))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.labelSalaryEmployee.setFont(font)
         self.labelSalaryEmployee.setObjectName("labelSalaryEmployee")
         self.labelCountEmployees = QtWidgets.QLabel(parent=self.centralwidget)
-        self.labelCountEmployees.setGeometry(QtCore.QRect(125, 245, 175, 23))
+        self.labelCountEmployees.setGeometry(QtCore.QRect(120, 245, 180, 23))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.labelCountEmployees.setFont(font)
@@ -75,27 +82,53 @@ class Ui_MainWindow(object):
         font.setPointSize(14)
         self.buttonAddInfo.setFont(font)
         self.buttonAddInfo.setObjectName("buttonAddInfo")
+        self.buttonAddInfo.clicked.connect(self.buttonAddInfo_click)
+
         self.buttonCalculateExpenses = QtWidgets.QPushButton(parent=self.centralwidget)
         self.buttonCalculateExpenses.setEnabled(False)
-        self.buttonCalculateExpenses.setGeometry(QtCore.QRect(130, 450, 151, 61))
+        self.buttonCalculateExpenses.setGeometry(QtCore.QRect(130, 370, 151, 61))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonCalculateExpenses.setFont(font)
         self.buttonCalculateExpenses.setObjectName("buttonCalculateExpenses")
+        self.buttonCalculateExpenses.clicked.connect(self.buttonCalculateExpenses_click)
+
         self.buttonGenerateReport = QtWidgets.QPushButton(parent=self.centralwidget)
         self.buttonGenerateReport.setEnabled(False)
-        self.buttonGenerateReport.setGeometry(QtCore.QRect(310, 450, 151, 61))
+        self.buttonGenerateReport.setGeometry(QtCore.QRect(310, 370, 151, 61))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonGenerateReport.setFont(font)
         self.buttonGenerateReport.setObjectName("buttonGenerateReport")
+        self.buttonGenerateReport.clicked.connect(self.buttonGenerateReport_click)
+
         self.buttonChangeDepartmentInfo = QtWidgets.QPushButton(parent=self.centralwidget)
         self.buttonChangeDepartmentInfo.setEnabled(False)
-        self.buttonChangeDepartmentInfo.setGeometry(QtCore.QRect(490, 450, 151, 61))
+        self.buttonChangeDepartmentInfo.setGeometry(QtCore.QRect(490, 370, 151, 61))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.buttonChangeDepartmentInfo.setFont(font)
         self.buttonChangeDepartmentInfo.setObjectName("buttonChangeDepartmentInfo")
+        self.buttonChangeDepartmentInfo.clicked.connect(self.buttonChangeDepartmentInfo_click)
+
+        self.buttonCalculateSales = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.buttonCalculateSales.setEnabled(False)
+        self.buttonCalculateSales.setGeometry(QtCore.QRect(230, 460, 151, 61))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.buttonCalculateSales.setFont(font)
+        self.buttonCalculateSales.setObjectName("buttonCalculateSales")
+        self.buttonCalculateSales.clicked.connect(self.buttonCalculateSales_click)
+
+        self.buttonStartRunCampaign = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.buttonStartRunCampaign.setEnabled(False)
+        self.buttonStartRunCampaign.setGeometry(QtCore.QRect(410, 460, 151, 61))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.buttonStartRunCampaign.setFont(font)
+        self.buttonStartRunCampaign.setObjectName("buttonStartRunCampaign")
+        self.buttonStartRunCampaign.clicked.connect(self.buttonStartRunCampaign_click)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuCalculateExpenses = QtGui.QAction(parent=MainWindow)
         self.menuCalculateExpenses.setObjectName("menuCalculateExpenses")
@@ -105,6 +138,73 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    # обробники натиску на кнопки
+    def buttonAddInfo_click(self):
+        if self.textEditDepartmentName.toPlainText() == "" or self.spinBoxRevenue.value() == 0 or self.spinBoxSalaryEmployee.value() == 0 or self.spinBoxCountEmployees.value() == 0:
+            self.msgBox = QtWidgets.QMessageBox()
+            self.msgBox.setIcon(QtWidgets.QMessageBox.Icon.Warning)
+            self.msgBox.setText("Not enough information")
+            self.msgBox.setWindowTitle("Warning!")
+            self.msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            self.msgBox.exec()
+        else:
+            # disable unnessesary elements
+            self.buttonAddInfo.setEnabled(False)
+            self.textEditDepartmentName.setEnabled(False)
+            self.spinBoxRevenue.setEnabled(False)
+            self.spinBoxSalaryEmployee.setEnabled(False)
+            self.spinBoxCountEmployees.setEnabled(False)
+
+            # enable elements
+            self.buttonCalculateExpenses.setEnabled(True)
+            self.buttonGenerateReport.setEnabled(True)
+            self.buttonChangeDepartmentInfo.setEnabled(True)
+            self.buttonCalculateSales.setEnabled(True)
+            self.buttonStartRunCampaign.setEnabled(True)
+
+            # save data
+            department.name = self.textEditDepartmentName.toPlainText()
+            department.revenue = self.spinBoxRevenue.value()
+            department.employee_salary = self.spinBoxSalaryEmployee.value()
+            department.count_employees = self.spinBoxCountEmployees.value()
+
+    def buttonChangeDepartmentInfo_click(self):
+        self.buttonChangeDepartmentInfo.setEnabled(False)
+        self.buttonAddInfo.setEnabled(True)
+        self.textEditDepartmentName.setEnabled(True)
+        self.spinBoxRevenue.setEnabled(True)
+        self.spinBoxSalaryEmployee.setEnabled(True)
+        self.spinBoxCountEmployees.setEnabled(True)
+
+    def buttonCalculateExpenses_click(self):
+        result_calculate = department.calculate_expenses(self, department)
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+        msgBox.setText("Результат розрахунку прибутку: " + str(result_calculate))
+        msgBox.setWindowTitle("Info")
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+
+        msgBox.exec()
+
+    def buttonGenerateReport_click(self):
+        department.generate_report(self, department)
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+        msgBox.setText("Звіт збереженно до файлу report.txt")
+        msgBox.setWindowTitle("Info")
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+
+        msgBox.exec()
+        return
+
+    def buttonCalculateSales_click(self):
+        sales = classes.Sales
+        sales.calculate_sales(self, department)
+
+    def buttonStartRunCampaign_click(self):
+        marketing = classes.Marketing
+        marketing.run_campaign(self, department.name)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Department"))
@@ -113,18 +213,18 @@ class Ui_MainWindow(object):
         self.labelSalaryEmployee.setText(_translate("MainWindow", "З-п співробітника"))
         self.labelCountEmployees.setText(_translate("MainWindow", "К-сть співробітників"))
         self.buttonAddInfo.setText(_translate("MainWindow", "Зберегти"))
-        self.buttonCalculateExpenses.setText(_translate("MainWindow", "Порахувати\n"
-"збитки"))
-        self.buttonGenerateReport.setText(_translate("MainWindow", "Згенерувати\n"
-"звіт"))
-        self.buttonChangeDepartmentInfo.setText(_translate("MainWindow", "Змінити\n"
-"інформацію"))
+        self.buttonCalculateExpenses.setText(_translate("MainWindow", "Порахувати\n""збитки"))
+        self.buttonGenerateReport.setText(_translate("MainWindow", "Згенерувати\n""звіт"))
+        self.buttonChangeDepartmentInfo.setText(_translate("MainWindow", "Змінити\n""інформацію"))
+        self.buttonStartRunCampaign.setText(_translate("MainWindow", "Запустити\nкампанію"))
+        self.buttonCalculateSales.setText(_translate("MainWindow", "Порахувати\nпродажі"))
         self.menuCalculateExpenses.setText(_translate("MainWindow", "Порахувати збитки"))
         self.menuGenerateReport.setText(_translate("MainWindow", "Зробити звіт"))
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
